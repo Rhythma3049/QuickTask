@@ -28,6 +28,7 @@ class SearchDelegater extends SearchDelegate {
   @override
   Widget? buildLeading(BuildContext context) {
     return IconButton(
+        color: Colors.white,
       icon: AnimatedIcon(
         icon: AnimatedIcons.menu_arrow,
         progress: transitionAnimation,

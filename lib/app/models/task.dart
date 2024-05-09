@@ -25,6 +25,8 @@ class Task {
   String? objectId;
   String? title;
   String? content;
+  String? dueDate;
+  bool? Status;
   String? createdAt;
   String? updatedAt;
 
@@ -32,6 +34,8 @@ class Task {
       {this.objectId,
       this.title,
       this.content,
+      this.dueDate,
+      this.Status,
       this.createdAt,
       this.updatedAt});
 
@@ -39,6 +43,8 @@ class Task {
     objectId = json['objectId'];
     title = json['title'];
     content = json['content'];
+    dueDate = json['dueDate'];
+    Status = json['Status'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -48,6 +54,8 @@ class Task {
     data['objectId'] = objectId;
     data['title'] = title;
     data['content'] = content;
+    data['dueDate'] = dueDate;
+    data['Status'] = Status;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
     return data;

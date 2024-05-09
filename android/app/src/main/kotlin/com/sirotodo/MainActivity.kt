@@ -1,4 +1,4 @@
-package com.sirotask
+package com.quicktask
 
 import io.flutter.embedding.android.FlutterActivity
 

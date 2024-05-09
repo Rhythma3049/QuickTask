@@ -4,42 +4,53 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../../exports.dart';
 
-/// Tasks screen after Tasks
-// ignore: must_be_immutable
-class TasksView extends StatelessWidget {
-  final TasksController controller = Get.put(TasksController());
-  final GetStorage userData = GetStorage();
+class TasksView extends StatefulWidget {
   final Task? currentTask;
   Size? size;
 
   TasksView({Key? key, this.currentTask}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    size = Get.size;
-    if (currentTask != null) {
-      controller.task = currentTask;
+  _TasksViewState createState() => _TasksViewState();
+}
+
+class _TasksViewState extends State<TasksView> {
+  final TasksController controller = Get.put(TasksController());
+  final GetStorage userData = GetStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.currentTask != null) {
+      controller.task = widget.currentTask;
       controller.showCurrentTask();
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    widget.size = Get.size;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Color.fromARGB(255, 75, 7, 54),
         title: Text(
           AppConstants.taskTitle,
-          style: appBarTextStyle.copyWith(fontSize: 25),
+          style: appBarTextStyle.copyWith(fontSize: 25, color: Colors.white),
         ),
         actions: [
-          currentTask != null
+          widget.currentTask != null
               ? InkWell(
                   child: const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Icon(Icons.delete),
+                    padding: EdgeInsets.all(5),
+                    child: Icon(Icons.delete, color: Colors.white),
                   ),
                   onTap: () => controller.confirmDelete(context),
                 )
               : InkWell(
                   child: const Padding(
                     padding: EdgeInsets.all(10),
-                    child: Icon(Icons.clear),
+                    child: Icon(Icons.clear, color: Colors.white),
                   ),
                   onTap: () => controller.confirmCancel(context),
                 ),
@@ -57,7 +68,7 @@ class TasksView extends StatelessWidget {
         onPressed: () {
           controller.saveTask();
         },
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Color.fromARGB(255, 75, 7, 54),
         child: const Icon(Icons.save, color: AppColors.white),
       ),
     );
@@ -68,21 +79,61 @@ class TasksView extends StatelessWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Column(
         children: <Widget>[
-          FormInput(
-            iLabel: 'Title',
-            iController: controller.titleController!,
-            prefix: const Icon(Icons.text_fields),
-            iOptions: const <String>[],
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Title',
+              prefixIcon: const Icon(Icons.text_fields, color: Color.fromARGB(255, 75, 7, 54)),
+            ),
+            controller: controller.titleController!,
           ),
-          FormInput(
-            iLabel: 'Description',
-            iController: controller.contentController!,
-            isMultiline: true,
-            iType: TextInputType.multiline,
-            iOptions: const <String>[],
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Description',
+            ),
+            controller: controller.contentController!,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'DueDate',
+              suffixIcon: IconButton(
+                icon: Icon(Icons.calendar_today),
+                onPressed: () => _selectDate(context, controller.dueDateController!),
+              ),
+            ),
+            controller: controller.dueDateController!,
+            keyboardType: TextInputType.datetime,
+          ),
+          ListTile(
+            title: Text('Status'),
+            iconColor: Color.fromARGB(255, 75, 7, 54),
+            trailing: Switch(
+              activeColor: Color.fromARGB(255, 75, 7, 54),
+              value: controller.StatusController!.value,
+              onChanged: (value) {
+                print('Switch onChanged: $value');
+                setState(() {
+                  controller.StatusController!.value = value;
+                });
+                print('Switch value updated: ${controller.StatusController!.value}');
+              },
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      controller.text = picked.toString(); // Update the controller with the selected date
+    }
   }
 }

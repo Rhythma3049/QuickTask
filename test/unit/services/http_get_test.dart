@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sirotask/app/exports.dart';
+import 'package:quicktask/app/exports.dart';
 
 import 'http_get_test.mocks.dart';
 

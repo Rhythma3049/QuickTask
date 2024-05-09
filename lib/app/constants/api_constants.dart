@@ -1,10 +1,11 @@
 class ApiConstants {
   static const parseUrl = "https://parseapi.back4app.com/classes/";
-  static const parseAppID = "YOUR_PARSE_APPLICATION_ID";
-  static const parseApiKey = "YOUR_PARSE_REST_API_KEY";
+  static const parseAppID = "HeLGon4KRiMh38g4TiuZSrMUqSMChHNalZRZeia9";
+  static const parseApiKey = "15fpLPzMlqVOUYrSReCxpltiWIew6iT0B09fAbfx";
 
   static const task = "task";
   static const tasks = "tasks";
+  static const user = "user";
 }
 
 class EventConstants {

@@ -10,13 +10,13 @@
             "type": "dart"
         },
         {
-            "name": "sirotask (profile mode)",
+            "name": "quick task (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "sirotask (release mode)",
+            "name": "quicktask (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

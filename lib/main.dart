@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:quicktask/screens/login_screen.dart';
 import 'app/exports.dart';
 
 void main() async {
@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         title: AppConstants.appTitle,
         theme: asLightTheme,
       debugShowCheckedModeBanner: false,
+      home: LoginScreen(),
       initialRoute: Pages.initial,
       getPages: Pages.routes,
     );

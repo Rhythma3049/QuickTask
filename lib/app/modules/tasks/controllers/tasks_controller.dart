@@ -13,14 +13,21 @@ class TasksController extends GetxController {
   final GetStorage userData = GetStorage();
   Task? task;
   bool isLoading = false;
-  String? taskTitle, taskContent;
-  TextEditingController? titleController, contentController;
+  String? taskTitle;
+  String? taskContent;
+  String? taskDueDate;
+  bool? taskStatus;
+  
+  TextEditingController? titleController, contentController, dueDateController;
+  ValueNotifier<bool>? StatusController;
 
   @override
   void onInit() {
     super.onInit();
     titleController = TextEditingController();
     contentController = TextEditingController();
+    dueDateController = TextEditingController();
+    StatusController = ValueNotifier<bool>(true);
   }
 
   @override
@@ -37,6 +44,8 @@ class TasksController extends GetxController {
   Future<void> showCurrentTask() async {
     titleController!.text = task!.title!;
     contentController!.text = task!.content!;
+    dueDateController!.text = task!.dueDate!;
+    StatusController!.value = task!.Status! ;
   }
 
   // function to validate creds
@@ -45,6 +54,8 @@ class TasksController extends GetxController {
     if (titleController!.text.isNotEmpty) {
       taskTitle = titleController!.text;
       taskContent = contentController!.text;
+      taskDueDate = dueDateController!.text;
+      taskStatus = StatusController!.value;
       validated = true;
     } else {
       validated = false;
@@ -63,17 +74,35 @@ class TasksController extends GetxController {
       bool isConnected = await hasReliableInternetConnectivity();
 
       if (isConnected) {
-        final EventObject? eventObject = await httpPost(
-          client: http.Client(),
-          //appending the primary key is where the difference of updating vs new task comes in
-          url: task != null
-              ? ApiConstants.task
-              : ApiConstants.task + "/${task!.objectId}",
-          data: jsonEncode(<String, String>{
-            'title': taskTitle!,
-            'content': taskContent!,
-          }),
-        );
+ 
+
+   final EventObject? eventObject = 
+   task != null 
+   ? await httpPut(
+      client: http.Client(),
+      //appending the primary key is where the difference of updating vs new task comes in
+      url: 
+          ApiConstants.task + "/${task!.objectId}" ,
+      data: jsonEncode(<String, dynamic>{
+        'title': taskTitle!,
+        'content': taskContent!,
+        'dueDate' : taskDueDate!,
+        'Status' : taskStatus!,
+      }),
+    )
+   
+    : await httpPost(
+      client: http.Client(),
+      //appending the primary key is where the difference of updating vs new task comes in
+      url:
+           ApiConstants.task ,
+      data: jsonEncode(<String, dynamic>{
+        'title': taskTitle!,
+        'content': taskContent!,
+        'dueDate' : taskDueDate!,
+        'Status' : taskStatus,
+      }),
+    );
 
         isLoading = false;
         update();

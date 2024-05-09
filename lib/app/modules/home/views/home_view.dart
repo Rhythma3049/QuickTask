@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:quicktask/screens/login_screen.dart';
 
 import '../../../exports.dart';
 
@@ -19,21 +20,25 @@ class HomeView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Color.fromARGB(255, 75, 7, 54),
         title: Text(
           AppConstants.homeTitle,
-          style: appBarTextStyle.copyWith(fontSize: 25),
+          style: appBarTextStyle.copyWith(fontSize: 25, color: Colors.white),
         ),
         actions: [
           InkWell(
             child: const Padding(
               padding: EdgeInsets.all(10),
-              child: Icon(Icons.search),
+              child: Icon(Icons.logout_sharp, color: Colors.white,),
             ),
             onTap: () {
-              showSearch(
-                context: context,
-                delegate: SearchDelegater(),
-              );
+             Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                         showToast(
+        text: "You have been logged out",
+        state: ToastStates.success,
+      );
             },
           ),
         ],
@@ -48,7 +53,7 @@ class HomeView extends StatelessWidget {
             transition: Transition.rightToLeft,
           );
         },
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Color.fromARGB(255, 75, 7, 54),
         child: const Icon(Icons.add, color: AppColors.white),
       ),
     );
@@ -87,25 +92,56 @@ class HomeView extends StatelessWidget {
   }
 
   Widget buildItem(BuildContext context, Task setTask) {
-    return SizedBox(
-      height: 50,
-      child: ListTile(
-        leading: const Icon(Icons.task),
-        title: Text(
-          setTask.title!,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          setTask.content!,
-          style: const TextStyle(fontSize: 14),
-        ),
-        onTap: () {
-          Get.to(
-            () => TasksView(currentTask: setTask),
-            transition: Transition.rightToLeft,
-          );
-        },
+     const IconData add_task = IconData(0xe05b, fontFamily: 'MaterialIcons');
+    return Container(
+  decoration: BoxDecoration(
+    border: Border.all(
+      color: Colors.grey, // Border color
+      width: 1.0, // Border width
+    ),
+    borderRadius: BorderRadius.circular(10.0), // Border radius
+  ),
+  padding: EdgeInsets.all(10.0), // Padding around the container
+  margin: EdgeInsets.symmetric(vertical: 5.0), // Margin between each task container
+  child: SizedBox(
+    height: 100, // Adjust height as needed
+    child: ListTile(
+      leading: const Icon(add_task, color: Color.fromARGB(255, 75, 7, 54)),
+      title: Text(
+        setTask.title!,
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
-    );
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Description: ${setTask.content!}', // Display description with label
+            style: const TextStyle(fontSize: 14),
+          ),
+          Text(
+            'Due Date: ${setTask.dueDate!}', // Display due date with label
+            style: const TextStyle(fontSize: 12),
+          ),
+          Text(
+            'Status: ${setTask.Status! ? "Complete" : "Incomplete"}', // Display status with label
+            style: TextStyle(
+              fontSize: 12,
+              color: setTask.Status! ? Colors.green : Colors.red, // Set color based on status
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        Get.to(
+          () => TasksView(currentTask: setTask),
+          transition: Transition.rightToLeft,
+        );
+      },
+    ),
+  ),
+);
+
+
+
   }
 }
